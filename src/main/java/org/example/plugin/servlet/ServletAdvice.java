@@ -1,17 +1,14 @@
 package org.example.plugin.servlet;
 
+import com.alibaba.nacos.common.utils.StringUtils;
+
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
 
-import org.apache.commons.lang.StringUtils;
 import org.example.context.TagContext;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lombok.extern.slf4j.Slf4j;
-
-
-@Slf4j
 public class ServletAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Argument(value = 0, readOnly = false, typing = Assigner.Typing.DYNAMIC) Object req,

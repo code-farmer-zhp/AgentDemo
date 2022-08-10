@@ -1,11 +1,11 @@
 package org.example.plugin.nacos;
 
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
+import com.alibaba.nacos.common.utils.StringUtils;
 import com.netflix.loadbalancer.Server;
 
 import net.bytebuddy.asm.Advice;
 
-import org.apache.commons.lang.StringUtils;
 import org.example.context.TagContext;
 
 import java.util.ArrayList;
@@ -34,6 +34,9 @@ public class NacosBalancerAdvice {
                 newList.add(server);
             }
         }
-        instances = newList;
+        //发现有对应tag的服务
+        if (!newList.isEmpty()) {
+            instances = newList;
+        }
     }
 }

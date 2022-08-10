@@ -1,6 +1,9 @@
 package org.example;
 
+import com.alibaba.ttl.threadpool.agent.TtlAgent;
+
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
@@ -15,11 +18,19 @@ import java.util.List;
 public class MyAgent {
 
     public static void agentmain(String agentArgs, Instrumentation inst) {
-        System.out.println("loading dynamic agent ...");
+        System.out.println("loading dynamic agent ..." + MyAgent.class.getClassLoader());
 
+        TtlAgent.premain(agentArgs, inst);
         AgentBuilder agentBuilder = new AgentBuilder.Default()
                 .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
-                .disableClassFormatChanges();
+                .with(new AgentBuilder.TransformerDecorator() {
+                    @Override
+                    public ResettableClassFileTransformer decorate(ResettableClassFileTransformer classFileTransformer) {
+
+                        return new MyResettableClassFileTransformer(classFileTransformer);
+
+                    }
+                }).disableClassFormatChanges();
 
         List<Class<?>> advisors = PackageUtil.getClass("org.example.plugin", Advisor.class);
 
@@ -47,7 +58,9 @@ public class MyAgent {
             agentBuilder = agentBuilder.type(advisor.buildTypesMatcher()).transform(transformer);
 
         }
+
         agentBuilder.installOn(inst);
+
     }
 
 }

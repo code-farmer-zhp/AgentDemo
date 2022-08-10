@@ -7,9 +7,6 @@ import org.example.context.TagContext;
 
 import java.net.HttpURLConnection;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class URLConnectionAdvice {
 
     @Advice.OnMethodExit(onThrowable = Throwable.class)
