@@ -6,7 +6,7 @@ public class TagContext {
 
     public static final String TAG = "tag";
 
-    private static final TransmittableThreadLocal<String> threadLocal = new TransmittableThreadLocal();
+    private static final TransmittableThreadLocal<String> threadLocal = new TransmittableThreadLocal<>();
 
 
     public static void setTag(String tag) {
